@@ -31,7 +31,6 @@
             timeout-ms = <250>;
             key-positions = <20 31>;
             bindings = <&tog GAME>;
-            layers = <-1>;
         };
     };
 

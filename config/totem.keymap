@@ -19,8 +19,21 @@
 #define BASE 0
 #define NUM  1
 #define NAV  2
+#define GAME 3
 
 / {
+
+    combos {
+        compatible = "zmk,combos";
+        // Hold the two outermost keys (leftmost + rightmost columns) to toggle the
+        // gaming layer on; hold the same combo again to toggle it back off.
+        combo_game_layer {
+            timeout-ms = <250>;
+            key-positions = <20 31>;
+            bindings = <&tog GAME>;
+            layers = <-1>;
+        };
+    };
 
     behaviors {
       // Home-row mods. require-prior-idle-ms is the knob that stops
@@ -122,6 +135,45 @@
 &hm LEFT_META F5  &hm LEFT_ALT F6  &hm LCTRL F7  &hm LEFT_SHIFT F8 &kp C_BRI_UP &kp PG_DN   &kp LEFT    &kp DOWN    &kp RIGHT   &kp C_VOL_DN
     &trans      &kp F9      &kp F10     &kp F11     &kp F12     &kp C_BRI_DN    &kp INS     &kp C_PREV  &kp C_PP    &kp C_NEXT  &kp C_MUTE  &trans
                                         &trans      &trans      &trans          &trans      &trans      &trans
+                        >;
+                };
+
+// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+
+
+                game_layer {
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+                label= "GAME"              ;
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// WASD is shifted one column right of standard QWERTY so it's centered on the
+// middle finger (W/S = middle finger up/down, A/D = ring/index either side)
+// instead of the usual ring-finger-heavy offset. All modifiers are plain
+// dedicated keys (no home-row hold-taps) so they never mis-fire during play.
+// Z X C V sit together on the bottom row (crouch/prone/lean/building keys in
+// most shooters use this exact cluster: PUBG crouch=C/prone=X, Fortnite
+// building=Z X C V). The right hand is fully transparent -- every key there
+// keeps typing normal Colemak-DH, so it still works for game chat etc.
+// This layer is toggled on/off by the combo above (hold the two outermost
+// keys together to flip it either way), so it stays active hands-free -- no
+// key needs to be held to remain in GAME. That frees up the outermost keys
+// themselves, so they're left &trans and simply fall through to their base
+// bindings (RALT / apostrophe) below.
+//             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
+//             ┃    TAB    ┃     Q     ┃     W     ┃     E     ┃     R     ┃   ┃           ┃           ┃           ┃           ┃           ┃
+//             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
+//             ┃   CTRL    ┃     A     ┃     S     ┃     D     ┃     F     ┃   ┃           ┃           ┃           ┃           ┃           ┃
+// ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
+// ┃  (base)   ┃   SHIFT   ┃     Z     ┃     X     ┃     C     ┃     V     ┃   ┃  (base)   ┃  (base)   ┃  (base)   ┃  (base)   ┃  (base)   ┃  (base)   ┃
+// ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
+//                                     ┃    ESC    ┃    ALT    ┃    SPC    ┃   ┃  (base)   ┃  (base)   ┃  (base)   ┃
+//                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
+ bindings = <
+// ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
+
+                &kp TAB     &kp Q       &kp W       &kp E       &kp R           &trans      &trans      &trans      &trans      &trans
+                &kp LCTRL   &kp A       &kp S       &kp D       &kp F           &trans      &trans      &trans      &trans      &trans
+    &trans      &kp LSHFT   &kp Z       &kp X       &kp C       &kp V           &trans      &trans      &trans      &trans      &trans      &trans
+                                        &kp ESC     &kp LALT    &kp SPACE       &trans      &trans      &trans
                         >;
                 };
        };
